@@ -1,0 +1,21 @@
+# Ignore node_modules directory
+node_modules/
+
+# Ignore environment files (if you have any)
+.env
+
+# Ignore logs
+logs/
+
+# Ignore any build output
+build/
+
+# Ignore development dependencies installed via npm
+# Comment out if you want to include them in version control
+# You might also adjust this list based on your specific setup
+# Example: If you use Yarn, replace "npm-debug.log" with "yarn-debug.log" and "yarn-error.log"
+npm-debug.log
+yarn-error.log
+
+# Ignore any local configuration files
+config/local.js
