@@ -14,4 +14,22 @@ app.use(cors())
 
 //  database connection
 // user -jeffreydb  , pass - 123321wwe
-mongodb+srv://jeffreydb:<password>@cluster0.ifm647s.mongodb.net/
+
+
+mongoose.connect("mongodb+srv://jeffreydb:123321wwe@cluster0.ifm647s.mongodb.net/")
+
+// API Creation
+
+app.get('/', (req , res) => {
+    res.send("Express app is running")
+})
+
+app.listen(port, (err) => {
+    if (!err) {
+        console.log("Server running on port:"+port)
+    }
+    else {
+        console.log("error"+err)
+    }
+})
+
