@@ -19,13 +19,8 @@ app.use(cors())
 // user-jeffbro4lyf pass-jeffrey
 
 /* connecting database */
-// mongoose.set('strictQuery', false);
-// mongoose.connect("mongodb+srv://jeffreydb:123321we@cluster0.ifm647s.mongodb.net/", {dbName : "Ecommerce"})
-// .then( () => console.log('connected to database'))
-// .catch(err=> console.error("not connected to database ",err));
 
 
-mongoose.connect("?retryWrites=true&w=majority/EcommerceApp")
     .then((res) => {
     console.log("Connected")
     })
@@ -60,6 +55,69 @@ app.post("/upload", Upload.single('product'), (req, res) => {
     res.json({
         Succes: 1,
         Image_url:`http://localhost:${port}/images/${req.file.filename}`
+    })
+})
+
+// schema for creating products
+
+const Product = mongoose.model("Product", {
+    id: {
+        type: Number,
+        required: true
+        
+    },
+    name: {
+        type: String,
+        required:true
+    },
+    image: {
+        type: String,
+        required:true
+    },
+    category: {
+        type: String,
+        required:true
+    },
+    new_price: {
+        type: Number,
+        required:true
+        
+    },
+     old_price: {
+        type: Number,
+        required:true
+        
+    },
+    date: {
+        type: Date,
+        default:Date.now
+    },
+    available: {
+        type: Boolean,
+        default:true
+    },
+    
+    
+    
+})
+
+
+app.post('/addproduct', async (req, res) => {
+    const product = new Product({
+        id: req.body.id,
+        name: req.body.name,
+        image: req.body.image,
+        category: req.body.category,
+        new_price: req.body.new_price,
+        old_price: req.body.old_price,
+        
+    });
+    console.log(product)
+    await product.save();
+    console.log("saved")
+    res.json({
+        success: 1,
+        name:req.body.name
     })
 })
 
