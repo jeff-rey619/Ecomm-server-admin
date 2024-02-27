@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './AddProduct.css'
 import UploadArea from '../../assets/upload_area.svg'
+import { json } from 'react-router-dom';
 function AddProduct(props) {
     const [image, setImage] = useState(false);
     const [product_Details, setProductDetails] = useState({
@@ -43,13 +44,30 @@ function AddProduct(props) {
             
         )
             .then((data) => {
-                console.log(data)
+                
                 responseData = data;
-              
+              console.log(responseData)
             })
         
         if (responseData.Succes) {
-            product.image = responseData.image_url;
+console.log(product)
+            product.image = responseData.Image_url;
+
+            await fetch('http://localhost:4000/addproduct', {
+                 method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            
+                },
+            body: JSON.stringify(product)
+            })
+                .then((res) => res.json())
+                .then((res) => {
+                    console.log(res)
+                (res.success ? alert("success") : alert("not success"))
+                }
+            )
         }
     }
     return (
