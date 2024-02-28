@@ -23,7 +23,21 @@ function ListProduct() {
 
     useEffect(() => {
      fetchInfo()   
-    },[])
+    }, [])
+    
+    async function removeProduct(id) {
+        await fetch('http://localhost:4000/removeproduct', {
+              method: 'POST',
+             headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            
+            },
+             body: JSON.stringify({id:id}) 
+        })
+
+        await  fetchInfo() 
+    }
 
     return (
         <div className='list-product'>
@@ -60,7 +74,9 @@ function ListProduct() {
                             <p>
                                 {res.category}
                             </p>
-                            <img className='listproduct-remove-icon' src={cross_icon} alt='' />
+                                <img onClick={() => {
+                                    removeProduct(res.id)
+                            }} className='listproduct-remove-icon' src={cross_icon} alt='' />
                         </div>
                         <hr/>
                           </>
