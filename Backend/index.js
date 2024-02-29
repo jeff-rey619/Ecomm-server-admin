@@ -266,6 +266,66 @@ app.get('/newcollections', async (req, res) => {
     res.send(newcollection)
 })
 
+// creating endpoint for popular in women section
+
+app.get('/popularinwomen', async (req, res) => {
+    let products = await Product.find({ category: "Women" })
+    let popular_in_women = products.slice(0, 4);
+    console.log("Popular in women fetched")
+    res.send(popular_in_women)
+}) 
+
+// creatind middle wear to fetch user
+  const fetchuser = async (req ,res , next) => {
+      const token = req.header('auth-token');
+      if (!token) {
+          res.status(401).send({errors:"Please authenticate using valid token"})
+      }
+      else {
+          try {
+              const data = jwt.verify(token, 'secret_ecom')
+              req.user = data.user;
+              next();
+          }
+          catch(err) {
+              res.status(401).send({errors:err})
+          }
+      }
+    }
+// creating end points for adding products in cart data
+app.post('/addtocart',fetchuser , async (req, res) => {
+    console.log(req.body, req.user)
+    let userData = await Users.findOne({ _id: req.user.id })
+    userData.cartData[req.body.itemId] += 1
+    await Users.findOneAndUpdate({ _id: req.user.id }, {
+        cartData:userData.cartData
+    })
+})
+
+// creating endpoint to remove product from cart data
+
+app.post('/removefromcart', fetchuser, async (req, res) => {
+    let userData = await Users.findOne({ _id: req.user.id })
+    if (userData.cartData[req.body.itemId] > 0) {
+        userData.cartData[req.body.itemId] -= 1
+    await Users.findOneAndUpdate({ _id: req.user.id }, {
+        cartData:userData.cartData
+    }) 
+        res.send("Removed")
+    }
+   
+})
+
+
+// creating endpoint for getting cart items
+
+app.post('/getcart', fetchuser, async (req, res) => {
+    console.log("Getcart")
+    let userData = await Users.findOne({ _id: req.user.id })
+    res.json(userData.cartData)
+})
+
+
 app.listen(port, (err) => {
     if (!err) {
         console.log("Server running on port:"+port)
